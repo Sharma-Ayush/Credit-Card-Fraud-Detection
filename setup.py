@@ -17,7 +17,7 @@ def get_dependencies(dependency_file:str) -> List[str]:
     return dependencies
 
 setup(
-    name = 'ieee_cis_fraud_detection',
+    name = 'credit_card_fraud_detection',
     version = '0.0.1',
     author = 'Ayush Sharma',
     author_email = 'ayushsharma812@gmail.com',
