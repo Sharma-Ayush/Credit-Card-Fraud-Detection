@@ -4,7 +4,7 @@ matplotlib
 seaborn
 scipy
 statsmodels
-scikit-learn
+scikit-learn==1.5.2
 imblearn
 xgboost
 -e .
