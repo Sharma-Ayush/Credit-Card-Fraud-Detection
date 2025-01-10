@@ -6,4 +6,5 @@ scipy
 statsmodels
 scikit-learn
 imblearn
+xgboost
 -e .
