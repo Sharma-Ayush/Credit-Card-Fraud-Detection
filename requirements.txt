@@ -9,4 +9,5 @@ imblearn
 xgboost
 tensorflow
 keras
+scikeras
 -e .
