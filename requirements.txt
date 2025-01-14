@@ -7,7 +7,4 @@ statsmodels
 scikit-learn==1.5.2
 imblearn
 xgboost
-tensorflow
-keras
-scikeras
 -e .
