@@ -2,23 +2,24 @@
     "version": 1,
     "disable_existing_loggers": false,
     "formatters": {
-        "simple": {
-            "format": "%(levelname)s: %(filename)s file, line no. %(lineno)d -> %(message)s"
+        "simple_formatter": {
+            "class": "src.utils.CustomFormatter",
+            "format": "%(levelname)s: %(pathname)s file, line no. %(lineno)d -> %(message)s"
         },
-        "detailed": {
-            "format": "%(levelname)s: %(filename)s file, line no. %(lineno)d at %(asctime)s -> %(message)s",
+        "detailed_formatter": {
+            "class": "src.utils.CustomFormatter",
+            "format": "%(levelname)s: %(pathname)s file, line no. %(lineno)d at %(asctime)s -> %(message)s",
             "datefmt": "%d-%b-%Y %H:%M:%S %z"
-        }
-    },
+    }},
     "handlers": {
         "stdout": {
             "class": "logging.StreamHandler",
-            "formatter": "simple",
+            "formatter": "simple_formatter",
             "stream": "ext://sys.stdout"
         },
         "rotating_file": {
             "class": "logging.handlers.RotatingFileHandler",
-            "formatter": "detailed",
+            "formatter": "detailed_formatter",
             "filename": "logs/app.log",
             "backupCount": 5,
             "maxBytes": 125000,
