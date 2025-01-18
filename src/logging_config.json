@@ -1,22 +1,15 @@
 {
     "version": 1,
     "disable_existing_loggers": false,
+
     "formatters": {
-        "simple_formatter": {
-            "class": "src.utils.CustomFormatter",
-            "format": "%(levelname)s: .\\%(pathname)s file, line no. %(lineno)d -> %(message)s"
-        },
         "detailed_formatter": {
             "class": "src.utils.CustomFormatter",
             "format": "%(levelname)s: .\\%(pathname)s file, line no. %(lineno)d at %(asctime)s -> %(message)s",
             "datefmt": "%d-%b-%Y %H:%M:%S %z"
-    }},
+        }
+    },
     "handlers": {
-        "stdout": {
-            "class": "logging.StreamHandler",
-            "formatter": "simple_formatter",
-            "stream": "ext://sys.stdout"
-        },
         "rotating_file": {
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "detailed_formatter",
@@ -30,8 +23,7 @@
     "root": {
         "level": "INFO",
         "handlers": [
-            "rotating_file",
-            "stdout"
+            "rotating_file"
         ]
     }
 }
