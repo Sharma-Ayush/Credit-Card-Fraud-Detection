@@ -4,6 +4,9 @@ import sys
 import dill
 import pickle
 
+from sklearn.metrics import auc, precision_recall_curve
+from sklearn.metrics._scorer import make_scorer
+
 from src.exception import CustomError
 from src.logger import logging
 
@@ -44,4 +47,13 @@ def load_object(file_path):
         error_obj = CustomError(*sys.exc_info())
         logging.error(error_obj, exc_info = True)
         raise error_obj
+    
+def area_under_precision_recall_curve(y_true, y_pred):
+    '''
+    Function that can compute the area under precision recall curve
+    '''
+    precision, recall, thresholds = precision_recall_curve(y_true, y_pred)
+    auc_precision_recall = auc(recall, precision)
+    return auc_precision_recall
+
 
