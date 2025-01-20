@@ -22,7 +22,9 @@ class TrainingPipelineConfig:
     model_obj_file_path = os.path.join("artifacts", "model.pkl")
 
 class TrainingPipeline:
-    '''A class for running the whole training pipeline'''
+    '''
+    A class for running the whole training pipeline
+    '''
     def __init__(self):
         self.training_pipeline_config = TrainingPipelineConfig()
 
@@ -51,7 +53,7 @@ class TrainingPipeline:
         
     def transform_data_without_resampling(self, pre_processor, X, Y):
         '''
-        Take in the pre-processor, X, Y and pre-process X & Y to return the transformed version of X for model evaluation or prediction
+        Take in the pre-processor, X, Y and pre-process X & Y to return the transformed version of X for model evaluation
         '''
         data_transformation = DataPreProcessor()
         X_transformed = data_transformation.transform(pre_processor, X, Y)
