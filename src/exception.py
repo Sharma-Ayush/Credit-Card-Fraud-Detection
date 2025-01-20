@@ -1,6 +1,3 @@
-import sys
-from src.logger import logging
-
 class CustomError(Exception):
     '''Custom Exception class for making the print of exception message more informative'''
     def __init__(self, type_of_error, exception_object, traceback):
