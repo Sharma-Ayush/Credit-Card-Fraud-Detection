@@ -56,7 +56,7 @@ class DataIngestion:
         df_train = pd.concat((X_train, Y_train), axis = 1)
 
         # Saving train data description
-        df_train.describe().loc[['min', '50%', 'max'], :].to_csv(self.ingestion_config.train_data_describe_path, index = True, header = True)
+        df_train.drop(target_class, axis = 1).describe().loc[['min', '50%', 'max'], :].to_csv(self.ingestion_config.train_data_describe_path, index = True, header = True)
 
         # Save the data to files
         self.save_data(df, self.ingestion_config.raw_data_path)
