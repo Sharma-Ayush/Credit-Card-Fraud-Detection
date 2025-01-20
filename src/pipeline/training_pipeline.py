@@ -51,15 +51,6 @@ class TrainingPipeline:
 
         return (X_train_transformed, Y_train_transformed)
         
-    def transform_data_without_resampling(self, pre_processor, X, Y):
-        '''
-        Take in the pre-processor, X, Y and pre-process X & Y to return the transformed version of X for model evaluation
-        '''
-        data_transformation = DataPreProcessor()
-        X_transformed = data_transformation.transform(pre_processor, X, Y)
-        
-        return X_transformed
-        
     def train_model(self, model, params, X_train, Y_train):
         '''
         Take in the model, parameters, transformed-resampled train set and fit on it
@@ -130,9 +121,10 @@ class TrainingPipeline:
             best_model_index = self.find_best_model(models_data)
 
             if models_data[best_model_index]['test_score'] >= score_threshold:
-                # saving the best model
+                # Saving the best model
                 save_object(self.training_pipeline_config.preprocessor_obj_file_path, models_data[best_model_index]['pre-processor'])
                 save_object(self.training_pipeline_config.model_obj_file_path, models_data[best_model_index]['model'])
+                # Print the best performance
                 print(f"Training pipeline completed.")
                 print(f'Best model - {models_data[best_model_index]['name'].replace("_", " ")}')
                 print(f'Train Score - {models_data[best_model_index]['train_score']}')
@@ -145,8 +137,6 @@ class TrainingPipeline:
             logging.error(error_obj, exc_info = True)
             raise error_obj
         else:
-            save_object(self.training_pipeline_config.preprocessor_obj_file_path, models_data[best_model_index]['pre-processor'])
-            save_object(self.training_pipeline_config.model_obj_file_path, models_data[best_model_index]['model'])
             logging.info('Successfully completed training pipeline!!!')
 
 if __name__ == "__main__":
