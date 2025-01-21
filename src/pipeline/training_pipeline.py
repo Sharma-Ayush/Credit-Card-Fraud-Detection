@@ -2,6 +2,8 @@ import sys
 import os
 from dataclasses import dataclass
 import numpy as np
+import pandas as pd
+import shutil
 
 from src.components.data_ingestion import DataIngestion
 from src.components.data_transformation import DataPreProcessor
@@ -16,10 +18,14 @@ from src.logger import logging
 @dataclass
 class TrainingPipelineConfig:
     '''
-    A data class for storing paths related to training pipeline
+    A data class for storing paths related to saving of objects related to training pipeline
     '''
     preprocessor_obj_file_path = os.path.join("artifacts", "preprocessor.pkl")
     model_obj_file_path = os.path.join("artifacts", "model.pkl")
+    raw_data_path = os.path.join("artifacts", "raw_data.csv")
+    train_data_path = os.path.join("artifacts", "train.csv")
+    test_data_path = os.path.join("artifacts", "test.csv")
+    train_data_describe_path = os.path.join("artifacts", "train_data_describe.csv")
 
 class TrainingPipeline:
     '''
@@ -86,6 +92,40 @@ class TrainingPipeline:
                     best_model_score = model['test_score']  
 
         return best_model_index
+    
+    def save_data(self, X_train, Y_train, X_test, Y_test, ingestion_path, preprocessor, model):
+        '''
+        Save raw data, train set, test set, train data description, pre-processor and model in given locations
+        '''
+        df_train = pd.concat((X_train, Y_train), axis = 1)
+
+        # Create required directories, if not exist
+        os.makedirs(os.path.dirname(self.training_pipeline_config.raw_data_path), exist_ok = True)
+
+        # Copying the raw file
+        shutil.copyfile(ingestion_path,
+                        self.training_pipeline_config.raw_data_path)
+
+        # Saving the train data
+        df_train.to_csv(self.training_pipeline_config.train_data_path,
+                        index = True,
+                        header = True)
+        
+        # Saving train data description
+        df_train.iloc[:, :-1].describe().loc[['min', '50%', 'max'], :].to_csv(self.training_pipeline_config.train_data_describe_path, index = True, header = True)
+        
+        # Saving the test data
+        pd.concat((X_test, Y_test), axis = 1).to_csv(self.training_pipeline_config.test_data_path,
+                                                     index = True,
+                                                     header = True)
+        
+        # Saving the pre-processor
+        save_object(self.training_pipeline_config.preprocessor_obj_file_path,
+                    preprocessor)
+        
+        # Saving the model
+        save_object(self.training_pipeline_config.model_obj_file_path,
+                    model)
 
     def run_pipeline(self, score_threshold, ingestion_path = 'notebook/Data/creditcard.csv'):
         logging.info('Started training pipeline...')
@@ -121,9 +161,14 @@ class TrainingPipeline:
             best_model_index = self.find_best_model(models_data)
 
             if models_data[best_model_index]['test_score'] >= score_threshold:
-                # Saving the best model
-                save_object(self.training_pipeline_config.preprocessor_obj_file_path, models_data[best_model_index]['pre-processor'])
-                save_object(self.training_pipeline_config.model_obj_file_path, models_data[best_model_index]['model'])
+                # Saving the related files
+                self.save_data(X_train,
+                               Y_train,
+                               X_test,
+                               Y_test,
+                               ingestion_path,
+                               models_data[best_model_index]['pre-processor'],
+                               models_data[best_model_index]['model'])
                 # Print the best performance
                 print(f"Training pipeline completed.")
                 print(f'Best model - {models_data[best_model_index]['name'].replace("_", " ")}')
@@ -142,5 +187,3 @@ class TrainingPipeline:
 if __name__ == "__main__":
     training_pipeline_obj = TrainingPipeline()
     training_pipeline_obj.run_pipeline(0.6)
-
-    
