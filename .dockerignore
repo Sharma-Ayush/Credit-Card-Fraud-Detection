@@ -1,0 +1,12 @@
+logs
+.git
+.gitattributes
+.gitignore
+README.md
+.dockerignore
+Dockerfile
+src/__pycache__
+src/components/__pycache__
+src/pipeline/__pycache__
+notebook/Data/creditcard_train.csv
+notebook/Data/creditcard_tes.csv
