@@ -10,3 +10,6 @@ src/components/__pycache__
 src/pipeline/__pycache__
 notebook/Data/creditcard_train.csv
 notebook/Data/creditcard_tes.csv
+artifacts/raw_data.csv
+artifacts/train.csv
+artifacts/test.csv
