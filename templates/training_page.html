@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Fraud Detection</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #74ebd5, #9face6);
+        }
+
+        .container {
+            text-align: center;
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .heading {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .upload-box {
+            border: 2px dashed #007BFF;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            color: #555;
+            cursor: pointer;
+        }
+
+        .upload-box:hover {
+            background-color: #f1faff;
+        }
+
+        .upload-box input {
+            display: none;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-align: center;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .button:disabled {
+            background-color: #0056b3;
+            cursor: not-allowed;
+        }
+
+        .note {
+            font-size: 0.8em;
+            color: #777;
+            margin-top: 5px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .success-message {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="heading">Credit Card Transaction Fraud Detection</div>
+
+        <!-- File upload box -->
+        <div class="upload-box" onclick="document.getElementById('fileInput').click();">
+            Click to upload, or use default path 'notebook/Data/creditcard.csv'
+            <input type="file" id="fileInput" onchange="handleFile()">
+        </div>
+
+        <!-- Buttons Container -->
+        <div class="button-container">
+            <!-- Start Training Button -->
+            <button class="button" id="startTrainingButton" onclick="startTraining()">Start Training</button>
+
+            <!-- Go to Home Page Button -->
+            <button type="button" class="button" id="goHomeButton" onclick="window.location.href='/';">Go to Home Page</button>
+        </div>
+
+        <!-- Success Message -->
+        <div class="success-message" id="successMessage">Training Completed Successfully!!</div>
+
+        <!-- Error redirection -->
+        <div id="errorMessage" style="color: red; display: none;">Something went wrong. Please try again.</div>
+    </div>
+
+    <script>
+        let filePath = "";
+
+        function handleFile() {
+            const fileInput = document.getElementById('fileInput');
+            filePath = fileInput.files[0] ? fileInput.files[0].name : "";
+        }
+
+        function startTraining() {
+            if (!filePath) {
+                filePath = 'notebook/Data/creditcard.csv';  // Use default path if no file uploaded
+            }
+
+            // Change button states and display
+            const startButton = document.getElementById('startTrainingButton');
+            const homeButton = document.getElementById('goHomeButton');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+
+            startButton.disabled = true;
+            homeButton.disabled = true; // Disable 'Go to Home Page' button
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+
+            let dotCount = 1;
+            const originalText = "Training";
+            startButton.textContent = `${originalText}...`;
+
+            // Create an interval for dynamic dots animation
+            const interval = setInterval(() => {
+                dotCount = (dotCount % 3) + 1;
+                startButton.textContent = `${originalText}${'.'.repeat(dotCount)}`;
+            }, 500);
+
+            // Simulate training via backend call
+            fetch(`/train?file=${filePath}`)
+                .then(response => response.json())
+                .then(data => {
+                    clearInterval(interval);
+                    startButton.textContent = "Start Training";
+                    startButton.disabled = false;
+                    homeButton.disabled = false; // Enable 'Go to Home Page' button
+                    if (data.success) {
+                        successMessage.style.display = 'block';
+                    } else {
+                        window.location.href = '/404'; // Redirect on failure
+                    }
+                })
+                .catch(() => {
+                    clearInterval(interval);
+                    startButton.textContent = "Start Training";
+                    startButton.disabled = false;
+                    homeButton.disabled = false; // Enable 'Go to Home Page' button
+                    window.location.href = '/404'; // Redirect on error
+                });
+        }
+    </script>
+</body>
+</html>

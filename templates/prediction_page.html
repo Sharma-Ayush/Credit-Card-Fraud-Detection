@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Fraud Detection</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #74ebd5, #9face6);
+        }
+
+        .container {
+            text-align: center;
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 1400px;
+            width: 90%;
+        }
+
+        .heading {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: left;
+        }
+
+        .form-group label {
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .slider {
+            width: 100%;
+            height: 5px;
+        }
+
+        .value-display {
+            margin: 10px 0;
+            font-size: 0.85em;
+            color: #333;
+            text-align: center;
+            width: 60px;
+        }
+
+        .min-max {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75em;
+            color: #777;
+            width: 100%;
+        }
+
+        .predict-button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+
+        .predict-button:hover {
+            background-color: #0056b3;
+        }
+
+        .home-button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+            margin-left: 10px;
+        }
+
+        .home-button:hover {
+            background-color: #0056b3;
+        }
+
+        .prediction-message {
+            font-size: 1.2em;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333; /* Success color */
+        }
+
+        .result {
+            font-size: 1.2em;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="heading">Credit Card Transaction Fraud Detection</div>
+        <form id="predictionForm">
+            <div class="grid" id="variablesGrid">
+                <!-- Dynamic sliders will be generated here -->
+                {% for var, data in variable_data.items() %}
+                <div class="form-group">
+                    <label for="{{ var }}">{{ var }}</label>
+                    <input type="text" id="value{{ loop.index }}" value="{{ data.median }}" class="value-display" readonly>
+                    <input type="range" id="{{ var }}" name="{{ var }}" min="{{ data.min }}" max="{{ data.max }}" step="0.01" class="slider" value="{{ data.median }}" oninput="document.getElementById('value{{ loop.index }}').value = this.value">
+                    <div class="min-max">
+                        <span>{{ data.min }}</span>
+                        <span>{{ data.max }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <button type="button" class="predict-button" onclick="makePrediction()">Predict</button>
+            <button type="button" class="home-button" onclick="window.location.href='/';">Go to Home Page</button>
+
+            <div id="predictionResult" class="result" style="display: none;"></div>
+        </form>
+    </div>
+
+    <script>
+        // Function to handle prediction
+        function makePrediction() {
+            let predictionData = {};
+            {% for var, data in variable_data.items() %}
+                predictionData["{{ var }}"] = document.getElementById("{{ var }}").value;
+            {% endfor %}
+
+            // Send data to backend (Flask) for prediction
+            fetch('/predict_page', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(predictionData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Check if the response indicates success
+                if (data.result) {
+                    // Show the prediction result
+                    document.getElementById('predictionResult').style.display = 'block';
+                    document.getElementById('predictionResult').innerText = data.result;
+
+                } else {
+                    // Display error message if there's no result
+                    document.getElementById('predictionResult').style.display = 'block';
+                    document.getElementById('predictionResult').innerText = "Error occurred during prediction: " + data.message;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
