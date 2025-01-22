@@ -13,6 +13,10 @@
 - Modular coding with proper documentation.
 - Custom functions and classes for enhanced modularity and reusability.
 
+## 📚 Kaggle Notebooks  
+- **Part-1 | EDA, Feature Engineering, and Feature Selection:** [Link](https://www.kaggle.com/code/ayushsharma0812/part-1-eda-feature-engg-and-feature-selection)
+- **Part-2 | Predictive Modeling (24% performance boost):** [Link](https://www.kaggle.com/code/ayushsharma0812/part-2-predictive-modeling-24-performance-boost)
+
 ## 🧐 About the Problem Statement  
 In the golden age of the internet and AI, opportunities and information grow daily. People can work remotely, transfer money instantly, leverage AI tools, and even start online businesses. However, this progress brings challenges like UPI payment scams, job scams, AI deep fakes, and more.
 
@@ -59,10 +63,6 @@ All the columns are numeric in nature.
 
 The dataset exhibits significant class imbalance.
 
-## 📚 Kaggle Notebooks  
-- **Part-1 | EDA, Feature Engineering, and Feature Selection:** [Link](https://www.kaggle.com/code/ayushsharma0812/part-1-eda-feature-engg-and-feature-selection)
-- **Part-2 | Predictive Modeling (24% performance boost):** [Link](https://www.kaggle.com/code/ayushsharma0812/part-2-predictive-modeling-24-performance-boost)
-
 ## 🛠️ Tech Stack Used
 - **Programming Languages:** Python
 - **Libraries:** numpy, pandas, matplotlib, seaborn, scipy, statsmodels, scikit-learn, imblearn, xgboost
@@ -93,7 +93,7 @@ python app.py
 ```
 Access the app at `localhost:5000`.
 
-## 🐳 Building and using Docker Images
+## 🐳 Building and using Docker Images  
 1. **Open your cmd and navigate to the app directory:**
 ```
 cd app_py_file_directory
