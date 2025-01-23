@@ -7,6 +7,7 @@ on:
     paths-ignore:
       - 'README.md'
       - 'Images/**'
+      - 'deployment_documentation/**'
 
 permissions:
   id-token: write
